@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDocker - Container Inteligente com Nanotecnologia</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap">
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #007bff;
+            --dark-blue: #003366;
+            --light-blue: #e6f2ff;
+            --accent-blue: #00a8e8;
+            --white: #ffffff;
+            --gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 86, 179, 0.8), rgba(0, 86, 179, 0.8)), url('https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: var(--white);
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 168, 232, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 168, 232, 0.4);
+            background-color: #0095d6;
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--dark-blue);
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: var(--gray);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+
+        /* Technology Section */
+        .technology {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .tech-item {
+            text-align: center;
+            width: 200px;
+            margin-bottom: 30px;
+        }
+
+        .tech-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 36px;
+        }
+
+        .tech-item h3 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: var(--gray);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 60px;
+            color: var(--light-blue);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            z-index: 0;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            width: 30%;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-blue);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .footer-column {
+                width: 100%;
+            }
+        }
+
+        .simulation-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">i<span>Docker</span></a>
+                <ul class="nav-links">
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#features">Benefícios</a></li>
+                    <li><a href="#technology">Tecnologia</a></li>
+                    <li><a href="#testimonials">Depoimentos</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Revolucione seu armazenamento com o iDocker</h1>
+            <p>O container inteligente que combina nanotecnologia avançada, sensores e arduino para proteção e monitoramento
+                em tempo real dos seus ativos mais valiosos.</p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a href="#contact" class="cta-button">FAÇA O ORÇAMENTO</a>
+                <a href="v5.html" class="simulation-button"
+                    style="display: inline-block; background-color: transparent; color: var(--white); padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; transition: all 0.3s ease; border: 2px solid var(--white);">VÁ
+                    PARA A SIMULAÇÃO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">O Conceito iDocker</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Solução Inteligente para Gestão de Ativos</h3>
+                    <p>O iDocker é a evolução do armazenamento industrial, combinando a robustez dos containers
+                        com tecnologia de ponta para criar uma solução completa de monitoramento e proteção de
+                        cargas.</p>
+                    <p>Nosso container inteligente é revestido internamente com nanotecnologia patenteada que regula
+                        temperatura, umidade e protege contra corrosão, enquanto sensores baseados em Arduino coletam
+                        dados em tempo real sobre as condições internas e externas do container.</p>
+                    <p>Ideal para gestores que precisam de controle total sobre seus ativos, o iDocker oferece
+                        visibilidade, segurança e economia operacional.</p>
+                </div>
+                <div class="about-image">
+                    <img src="container.png"
+                        alt="Container Inteligente iDocker">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Benefícios do iDocker</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Monitoramento em Tempo Real</h3>
+                    <p>Acompanhe temperatura, umidade, vibração e localização do seu container através de nossa
+                        plataforma integrada, com alertas para qualquer anomalia detectada.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Proteção Avançada</h3>
+                    <p>Revestimento nanotecnológico que previne corrosão, regula temperatura e umidade, garantindo a
+                        integridade dos seus produtos mesmo em condições extremas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Customizável</h3>
+                    <p>Escolha os sensores que melhor atendem suas necessidades: desde monitoramento básico até soluções
+                        complexas com inteligência artificial para prever falhas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Integração Total</h3>
+                    <p>Conectado com nosso sistema de monitoramento com integração à inteligência artificial, para auxiliar
+                        no monitoramento integral do container.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Redução de Custos</h3>
+                    <p>Diminua perdas por danos, reduza seguros e otimize rotas logísticas com dados precisos sobre as
+                        condições de transporte e armazenamento.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Sustentabilidade</h3>
+                    <p>Nossa tecnologia reduz o desperdício de energia e materiais, contribuindo para suas metas ESG e
+                        redução da pegada de carbono.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="technology">
+        <div class="container">
+            <h2 class="section-title">Tecnologia Avançada</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="tech-icon">🧪</div>
+                    <h3>Nanotecnologia</h3>
+                    <p>Revestimento inteligente que se adapta às condições ambientais</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">⚙️</div>
+                    <h3>Arduino</h3>
+                    <p>Plataforma flexível para sensores personalizados</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">📶</div>
+                    <h3>IoT</h3>
+                    <p>Conexão contínua via 4G/LoRaWAN/Satélite</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">☁️</div>
+                    <h3>Cloud</h3>
+                    <p>Armazenamento e análise de dados na nuvem</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">O que dizem nossos clientes</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>O iDocker revolucionou nossa cadeia logística. Reduzimos perdas por umidade em 78% no último
+                            trimestre e agora temos visibilidade total de nossas cargas em trânsito.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RC</div>
+                        <div class="author-info">
+                            <h4>Ricardo Coimbra</h4>
+                            <p>Diretor de Logística, TransOcean</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>Implementamos 15 unidades do iDocker em nossos centros de distribuição e os resultados
+                            financeiros foram imediatos. A economia com seguros e perdas já pagou o investimento.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AF</div>
+                        <div class="author-info">
+                            <h4>Ana Ferreira</h4>
+                            <p>Gerente de Operações, PharmaCorp</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>Como gestor, a possibilidade de acessar dados em tempo real de qualquer lugar e tomar
+                            decisões baseadas em informações precisas mudou completamente nossa operação.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LS</div>
+                        <div class="author-info">
+                            <h4>Luiz Santos</h4>
+                            <p>CEO, AgroExport</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <div class="container">
+            <h2>Pronto para transformar sua operação logística?</h2>
+            <p>Nossa equipe está pronta para entender suas necessidades e desenvolver a solução perfeita para seu
+                negócio.</p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <a href="#" class="cta-button">FAÇA O ORÇAMENTO</a>
+                <a href="v5.html" class="simulation-button"
+                    style="display: inline-block; background-color: transparent; color: var(--white); padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; transition: all 0.3s ease; border: 2px solid var(--white);">VÁ
+                    PARA A SIMULAÇÃO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>iDocker</h3>
+                    <p>Soluções inteligentes de armazenamento e logística para gestores que exigem o máximo de seus
+                        ativos.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links</h3>
+                    <ul>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#features">Benefícios</a></li>
+                        <li><a href="#technology">Tecnologia</a></li>
+                        <li><a href="#testimonials">Depoimentos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="mailto:contato@idocker.com.br">contato@idocker.com.br</a></li>
+                        <li><a href="tel:+5511999999999">+55 11 99999-9999</a></li>
+                        <li>São Paulo - SP, Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 iDocker. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

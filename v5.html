@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDocker - Monitoramento Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --gray: #95a5a6;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-weight: 300;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-top: 40px;
+            font-weight: 500;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .truck-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            font-weight: 400;
+        }
+
+        .monitoring-panel {
+            position: relative;
+        }
+
+        .temp-display {
+            font-size: 4rem;
+            font-weight: 300;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .temp-normal {
+            color: var(--success);
+        }
+
+        .temp-high {
+            color: var(--danger);
+        }
+
+        .temp-low {
+            color: var(--warning);
+        }
+
+        .temp-range {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .sensor-data {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .sensor-item {
+            text-align: center;
+        }
+
+        .sensor-value {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .sensor-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button i {
+            font-size: 1.2rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-container {
+            margin-top: 20px;
+        }
+
+        .alert {
+            background-color: #ffecec;
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            animation: pulse 1.5s infinite;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 1.8rem;
+            color: var(--danger);
+        }
+
+        .alert-content h3 {
+            margin: 0 0 5px 0;
+            color: var(--danger);
+        }
+
+        .alert-content p {
+            margin: 0;
+            color: var(--dark);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .alert-history-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .alert-history {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .alert-history thead th {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+
+        .alert-history tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .alert-history tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .alert-history td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-resolved {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+
+        .status-unresolved {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            animation: pulse 2s infinite;
+        }
+
+        .timestamp {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .no-alerts {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .truck-info {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Ajuste para centralizar o título quando o botão estiver presente */
+        header h1 {
+            margin-left: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                left: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+
+            header h1 {
+                margin-left: 30px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header style="position: relative;">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>iDOCKER</h1>
+            <p class="subtitle">Sistema Inteligente de Monitoramento de Contêiners</p>
+        </header>
+        <div class="dashboard">
+            <div class="card">
+                <h2>Status do Caminhão</h2>
+                <div class="truck-info">
+                    <div class="info-item"> <strong>ID do Caminhão</strong> <span id="truck-id">TRK-2024-0873</span>
+                    </div>
+                    <div class="info-item"> <strong>Motorista</strong> <span id="driver">Carlos Silva</span> </div>
+                    <div class="info-item"> <strong>Rota</strong> <span id="route">São Paulo — Rio de Janeiro</span>
+                    </div>
+                    <div class="info-item"> <strong>Tipo de Carga</strong> <span id="cargo-type">Produtos
+                            Farmacêuticos</span> </div>
+                </div>
+            </div>
+            <div class="card monitoring-panel">
+                <h2>Monitoramento em Tempo Real</h2>
+                <div class="temp-display temp-normal" id="current-temp">5.0°C</div>
+                <div class="temp-range"> Temperatura Ideal: <strong>2°C - 8°C</strong> </div>
+                <div class="sensor-data">
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="humidity">45%</div>
+                        <div class="sensor-label">Umidade</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="coating">Arduino</div>
+                        <div class="sensor-label">Monitoramento</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-value" id="ia-status">Ativa</div>
+                        <div class="sensor-label">IA</div>
+                    </div>
+                </div>
+                <div class="controls"> <button id="simulate-high" class="btn-danger"> <i
+                            class="fas fa-temperature-high"></i> Simular +10°C </button> <button id="simulate-low"
+                        class="btn-warning"> <i class="fas fa-temperature-low"></i> Simular -10°C </button> <button
+                        id="reset-sim" class="btn-success"> <i class="fas fa-sync-alt"></i> Resetar </button> </div>
+                <div class="alert-container" id="alert-container"> <!-- Alertas serão inseridos aqui dinamicamente -->
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Histórico de Alertas</h2>
+            <div class="alert-history-container">
+                <table class="alert-history">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alert-history-body"> <!-- Histórico de alertas será inserido aqui --> </tbody>
+                </table>
+            </div>
+            <div id="no-alerts" class="no-alerts"> Nenhum alerta registrado até o momento </div>
+        </div>
+        <footer>
+            <p>© 2025 iDocker - Todos os direitos reservados</p>
+        </footer>
+    </div>
+    <script>
+        // Classe do Caminhão
+        class Caminhao {
+            constructor(id, motorista, rota, tipoCarga, tempMin, tempMax) {
+                this.id = id;
+                this.motorista = motorista;
+                this.rota = rota;
+                this.tipoCarga = tipoCarga;
+                this.tempMin = tempMin;
+                this.tempMax = tempMax;
+                this.temperaturaAtual = (tempMin + tempMax) / 2;
+                this.umidade = 45;
+                this.revestimento = "AlmoNano";
+                this.iaAtiva = true;
+                this.simulacaoManual = false;
+                this.alertasAtivos = [];
+                this.historicoAlertas = [];
+                this.ultimoAlerta = null;
+            }
+
+            simularVariacaoTemperatura() {
+                if (this.simulacaoManual) return;
+
+                // Variação aleatória de temperatura
+                const variacao = (Math.random() * 3) - 1.5;
+                this.temperaturaAtual += variacao;
+
+                // Efeito do revestimento inteligente
+                if (this.revestimento === "AlmoNano") {
+                    if (this.temperaturaAtual > this.tempMax) {
+                        this.temperaturaAtual -= 0.3;
+                    } else if (this.temperaturaAtual < this.tempMin) {
+                        this.temperaturaAtual += 0.3;
+                    }
+                }
+
+                // Atualizar umidade
+                this.umidade += (Math.random() * 4) - 2;
+                this.umidade = Math.max(30, Math.min(70, this.umidade));
+
+                // Verificar alertas
+                this.verificarAlertas();
+            }
+
+            forcarTemperatura(alteracao) {
+                this.simulacaoManual = true;
+                this.temperaturaAtual += alteracao;
+                this.verificarAlertas();
+            }
+
+            resetarSimulacao() {
+                this.simulacaoManual = false;
+                this.temperaturaAtual = (this.tempMin + this.tempMax) / 2;
+                this.verificarAlertas();
+            }
+
+            verificarAlertas() {
+                const agora = new Date();
+                const dataHora = agora.toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                // Verificar se temperatura saiu da faixa ideal
+                if (this.temperaturaAtual > this.tempMax || this.temperaturaAtual < this.tempMin) {
+                    const tipo = "Temperatura";
+                    let descricao;
+
+                    if (this.temperaturaAtual > this.tempMax) {
+                        descricao = `Temperatura alta: ${this.temperaturaAtual.toFixed(1)}°C (limite: ${this.tempMax}°C)`;
+                    } else {
+                        descricao = `Temperatura baixa: ${this.temperaturaAtual.toFixed(1)}°C (limite: ${this.tempMin}°C)`;
+                    }
+
+                    // Verificar se já existe um alerta ativo do mesmo tipo
+                    const alertaExistente = this.alertasAtivos.find(a => a.tipo === tipo);
+
+                    if (!alertaExistente) {
+                        const novoAlerta = {
+                            id: Date.now(),
+                            dataHora,
+                            tipo,
+                            descricao,
+                            status: "Não resolvido"
+                        };
+                        this.alertasAtivos.push(novoAlerta);
+                        this.historicoAlertas.unshift(novoAlerta);
+                        this.ultimoAlerta = novoAlerta;
+                    } else {
+                        // Atualizar descrição do alerta existente
+                        alertaExistente.descricao = descricao;
+                        alertaExistente.dataHora = dataHora;
+                        this.ultimoAlerta = alertaExistente;
+                    }
+                } else {
+                    // Temperatura voltou ao normal - resolver alertas ativos
+                    if (this.alertasAtivos.length > 0) {
+                        const dataHoraResolucao = agora.toLocaleString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+
+                        this.alertasAtivos = this.alertasAtivos.filter(alerta => {
+                            if (alerta.tipo === "Temperatura") {
+                                const alertaResolvido = {
+                                    ...alerta,
+                                    status: "Resolvido",
+                                    dataHora: dataHoraResolucao
+                                };
+                                this.historicoAlertas.unshift(alertaResolvido);
+                                return false;
+                            }
+                            return true;
+                        });
+                    }
+                }
+            }
+        }
+
+        // Criar instância do caminhão
+        const caminhao = new Caminhao(
+            "TRK-2024-0873",
+            "Carlos Silva",
+            "São Paulo — Rio de Janeiro",
+            "Produtos Farmacêuticos",
+            2, // tempMin
+            8  // tempMax
+        );
+
+        // Função para atualizar a interface
+        function atualizarInterface() {
+            // Atualizar temperatura atual
+            const tempElement = document.getElementById('current-temp');
+            tempElement.textContent = `${caminhao.temperaturaAtual.toFixed(1)}°C`;
+
+            // Atualizar classe de temperatura
+            tempElement.className = 'temp-display ';
+
+            if (caminhao.temperaturaAtual > caminhao.tempMax) {
+                tempElement.classList.add('temp-high');
+            } else if (caminhao.temperaturaAtual < caminhao.tempMin) {
+                tempElement.classList.add('temp-low');
+            } else {
+                tempElement.classList.add('temp-normal');
+            }
+
+            // Atualizar umidade
+            document.getElementById('humidity').textContent = `${caminhao.umidade.toFixed(0)}%`;
+
+            // Atualizar status da IA
+            document.getElementById('ia-status').textContent = caminhao.iaAtiva ? 'Ativa' : 'Inativa';
+        }
+
+        // Função para exibir alertas ativos
+        function exibirAlertasAtivos() {
+            const alertContainer = document.getElementById('alert-container');
+            alertContainer.innerHTML = '';
+
+            if (caminhao.alertasAtivos.length > 0) {
+                caminhao.alertasAtivos.forEach(alerta => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert';
+                    alertDiv.innerHTML = `
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>ALERTA: ${alerta.tipo}</h3>
+                    <p>${alerta.descricao}</p>
+                    <p class="timestamp">${alerta.dataHora}</p>
+                </div>
+            `;
+                    alertContainer.appendChild(alertDiv);
+                });
+            }
+        }
+
+        // Função para atualizar histórico de alertas
+        function atualizarHistoricoAlertas() {
+            const tbody = document.getElementById('alert-history-body');
+            const noAlertsDiv = document.getElementById('no-alerts');
+            tbody.innerHTML = '';
+
+            if (caminhao.historicoAlertas.length > 0) {
+                noAlertsDiv.style.display = 'none';
+
+                caminhao.historicoAlertas.slice(0, 10).forEach(alerta => {
+                    const tr = document.createElement('tr');
+                    const statusBadge = alerta.status === "Não resolvido"
+                        ? '<span class="status-badge status-unresolved"><i class="fas fa-exclamation-circle"></i> Não resolvido</span>'
+                        : '<span class="status-badge status-resolved"><i class="fas fa-check-circle"></i> Resolvido</span>';
+
+                    tr.innerHTML = `
+                <td>${alerta.dataHora}</td>
+                <td>${alerta.tipo}</td>
+                <td>${alerta.descricao}</td>
+                <td>${statusBadge}</td>
+            `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                noAlertsDiv.style.display = 'block';
+            }
+        }
+
+        // Função principal de simulação
+        function simular() {
+            if (!caminhao.simulacaoManual) {
+                caminhao.simularVariacaoTemperatura();
+            }
+
+            atualizarInterface();
+            exibirAlertasAtivos();
+            atualizarHistoricoAlertas();
+        }
+
+        // Configurar botões de controle
+        document.getElementById('simulate-high').addEventListener('click', () => {
+            caminhao.forcarTemperatura(10);
+            simular();
+        });
+
+        document.getElementById('simulate-low').addEventListener('click', () => {
+            caminhao.forcarTemperatura(-10);
+            simular();
+        });
+
+        document.getElementById('reset-sim').addEventListener('click', () => {
+            caminhao.resetarSimulacao();
+            simular();
+        });
+
+        // Iniciar simulação (executar a cada 3 segundos)
+        setInterval(simular, 3000);
+
+        // Executar uma vez imediatamente para inicializar
+        simular();
+    </script>
+</body>
+
+</html>
